@@ -6,8 +6,6 @@
     <title>Cafellito Coffee - Professional SWOT Tahlili</title>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -21,219 +19,169 @@
             --weakness-color: #e76f51;
             --opportunity-color: #457b9d;
             --threat-color: #1d3557;
-            --card-bg: rgba(255, 255, 255, 0.85);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            font-family: 'Plus+Jakarta+Sans', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             background: var(--accent);
             color: var(--text);
-            overflow: hidden;
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
         section {
-            height: 100vh;
-            width: 100vw;
+            min-height: 100vh;
+            width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 4rem 1.5rem;
             position: relative;
-            padding: 4rem;
-            transition: transform 0.8s cubic-bezier(0.86, 0, 0.07, 1);
         }
 
         .container {
             max-width: 1200px;
             width: 100%;
-            z-index: 2;
+            margin: 0 auto;
         }
 
+        /* Typography */
         h1, h2 {
-            font-family: 'Playfair+Display', serif;
-            line-height: 1.1;
+            font-family: 'Playfair Display', serif;
         }
 
         .section-title {
-            font-size: 5rem;
-            margin-bottom: 2rem;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s ease 0.3s;
+            font-size: clamp(2.2rem, 7vw, 4.5rem);
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
         }
 
-        .active .section-title {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
+        /* Content Grid - Desktop default */
         .content-grid {
             display: grid;
             grid-template-columns: 1.2fr 0.8fr;
-            gap: 4rem;
+            gap: 3rem;
             align-items: center;
+        }
+
+        /* Tablet and Mobile Responsive Adjustments */
+        @media (max-width: 992px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+            
+            .image-box {
+                order: -1; /* Rasmni matndan tepaga chiqarish */
+                height: 350px !important;
+            }
+
+            section {
+                padding: 6rem 1rem 3rem 1rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .image-box {
+                height: 250px !important;
+            }
+            .section-title {
+                font-size: 2.5rem;
+            }
         }
 
         .image-box {
             position: relative;
-            border-radius: 30px;
+            border-radius: 25px;
             overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            aspect-ratio: 4/5;
-            background: #eee;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+            height: 100%;
+            min-height: 450px;
         }
 
         .image-box img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.5s ease;
         }
 
-        /* Toggle (Accordion) Styling */
+        /* SWOT Accordion (Toggles) */
         .swot-accordion {
             display: flex;
             flex-direction: column;
-            gap: 0.6rem;
+            gap: 0.8rem;
         }
 
         .accordion-item {
-            background: var(--card-bg);
+            background: var(--white);
             border-radius: 18px;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.04);
             transition: all 0.3s ease;
-            opacity: 0;
-            transform: translateX(-20px);
-        }
-
-        .active .accordion-item {
-            opacity: 1;
-            transform: translateX(0);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
         }
 
         .accordion-header {
-            padding: 0.9rem 1.5rem;
+            padding: 1.2rem 1.5rem;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-weight: 700;
-            font-size: 1.05rem;
-            user-select: none;
-            transition: background 0.3s;
+            font-size: clamp(0.95rem, 3.5vw, 1.1rem);
+            gap: 12px;
             text-align: left;
         }
 
-        .accordion-header:hover {
-            background: rgba(212, 163, 115, 0.1);
-        }
-
         .accordion-header i {
-            transition: transform 0.3s ease;
             color: var(--secondary);
             flex-shrink: 0;
-            margin-left: 10px;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .accordion-content {
             max-height: 0;
             padding: 0 1.5rem;
             overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            color: #555;
-            line-height: 1.5;
+            transition: all 0.4s ease-out;
+            color: #5a5a5a;
             font-size: 0.95rem;
+            line-height: 1.7;
         }
 
         .accordion-item.open {
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-            background: #fff;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            border-color: rgba(212, 163, 115, 0.3);
         }
 
         .accordion-item.open .accordion-content {
-            max-height: 300px;
-            padding-bottom: 1.2rem;
+            max-height: 400px;
+            padding-bottom: 1.5rem;
         }
 
         .accordion-item.open .accordion-header i {
             transform: rotate(180deg);
         }
 
-        /* Backgrounds */
-        #hero { 
-            background: linear-gradient(rgba(74, 51, 45, 0.85), rgba(26, 15, 13, 0.9)), 
-                        url('https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=1000&auto=format&fit=crop'); 
-            background-size: cover;
-            background-position: center;
-            color: var(--accent); 
-        }
-        
-        #strengths { background: #f0fdf4; border-left: 20px solid var(--strength-color); }
-        #weaknesses { background: #fffafb; border-left: 20px solid var(--weakness-color); }
-        #opportunities { background: #f0f7ff; border-left: 20px solid var(--opportunity-color); }
-        #threats { background: #f8fafc; border-left: 20px solid var(--threat-color); }
-        #recommendations { background: var(--primary); color: var(--accent); }
-
-        .nav-controls {
-            position: fixed;
-            bottom: 40px;
-            right: 40px;
-            display: flex;
-            gap: 20px;
-            z-index: 100;
-        }
-
-        .nav-btn {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            border: 2px solid var(--secondary);
-            color: var(--secondary);
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .progress-bar {
-            position: fixed;
-            left: 40px;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            z-index: 100;
-        }
-
-        .progress-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: rgba(0,0,0,0.1);
-            cursor: pointer;
-        }
-
-        .progress-dot.active { background: var(--secondary); transform: scale(1.5); }
-
+        /* Badges */
         .badge {
             display: inline-block;
-            padding: 0.6rem 1.8rem;
+            padding: 0.5rem 1.4rem;
             border-radius: 50px;
-            text-transform: uppercase;
             font-weight: 800;
-            font-size: 0.85rem;
-            margin-bottom: 1.5rem;
+            font-size: 0.8rem;
+            text-transform: uppercase;
             letter-spacing: 2px;
+            margin-bottom: 1.2rem;
             color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
         .badge-s { background: var(--strength-color); }
@@ -241,25 +189,96 @@
         .badge-o { background: var(--opportunity-color); }
         .badge-t { background: var(--threat-color); }
 
-        @media (max-width: 1024px) {
-            .content-grid { grid-template-columns: 1fr; gap: 2rem; }
-            .section-title { font-size: 3rem; }
+        /* Fixed Controls for Mobile */
+        .nav-controls {
+            position: fixed;
+            bottom: 25px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .nav-btn:active {
+            transform: scale(0.9);
+        }
+
+        /* Section Styling */
+        #hero {
+            background: linear-gradient(rgba(43, 29, 25, 0.7), rgba(43, 29, 25, 0.7)), 
+                        url('https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+        }
+
+        #hero h1 { font-size: clamp(3rem, 12vw, 7.5rem); margin: 1rem 0; }
+        #hero p { font-size: clamp(1.1rem, 4vw, 1.5rem); max-width: 700px; margin: 0 auto; opacity: 0.9; }
+
+        #strengths { background-color: #f0fdf4; }
+        #weaknesses { background-color: #fffafb; }
+        #opportunities { background-color: #f0f7ff; }
+        #threats { background-color: #f9fafb; }
+
+        .rec-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+        }
+
+        .rec-card {
+            background: rgba(255,255,255,0.08);
+            padding: 2.5rem 1.5rem;
+            border-radius: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: background 0.3s;
+        }
+
+        .rec-card:hover {
+            background: rgba(255,255,255,0.12);
+        }
+
+        /* Progress indicator */
+        .progress-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: var(--secondary);
+            z-index: 2000;
+            transition: width 0.3s ease;
         }
     </style>
 </head>
 <body>
 
-    <div class="progress-bar" id="progressBar"></div>
+    <div class="progress-indicator" id="scrollProgress"></div>
 
-    <main id="main-slider">
+    <main>
         <!-- Hero Section -->
-        <section id="hero" class="active">
-            <div class="container text-center">
-                <div style="background: rgba(0,0,0,0.3); padding: 3rem; border-radius: 40px; display: inline-block; backdrop-filter: blur(5px);">
-                    <h2 style="color: var(--secondary); font-size: 1.5rem; margin-bottom: 1rem; letter-spacing: 4px;">STRATEGIK TAHLIL 2025</h2>
-                    <h1 class="section-title" style="font-size: 7rem; margin-bottom: 1rem;">Cafellito</h1>
-                    <p style="font-size: 1.6rem; max-width: 800px; margin: 0 auto; opacity: 0.9;">O'zbekistondagi Take-away formatining yulduzi.</p>
-                </div>
+        <section id="hero">
+            <div class="container">
+                <span style="letter-spacing: 5px; font-weight: 600; color: var(--secondary); display: block; margin-bottom: 0.5rem;">TAHLIL 2025</span>
+                <h1>Cafellito</h1>
+                <p>O'zbekistondagi eng yirik va tezkor Take-away qahva tarmog'ining strategik holati.</p>
             </div>
         </section>
 
@@ -267,39 +286,39 @@
         <section id="strengths">
             <div class="container">
                 <div class="content-grid">
-                    <div>
-                        <span class="badge badge-s">Kuchli Tomonlar</span>
-                        <h2 class="section-title" style="color: var(--strength-color)">Strengths</h2>
+                    <div class="swot-text">
+                        <span class="badge badge-s">Strengths</span>
+                        <h2 class="section-title" style="color: var(--strength-color);">Kuchli Tomonlar</h2>
                         <div class="swot-accordion">
-                            <div class="accordion-item" style="transition-delay: 0.1s">
+                            <div class="accordion-item">
                                 <div class="accordion-header" onclick="toggleAccordion(this)">
                                     <span>Strategik jihatdan eng qulay nuqtalar</span>
                                     <i data-lucide="chevron-down"></i>
                                 </div>
                                 <div class="accordion-content">Keng tarmoq va qulay joylashuv, 70 ta filial butun mamlakat bo'yicha va eng qulay lakatsiyalarda joylashgan. (touchpoint yani har bir joydan chiqib kelish)</div>
                             </div>
-                            <div class="accordion-item" style="transition-delay: 0.2s">
+                            <div class="accordion-item">
                                 <div class="accordion-header" onclick="toggleAccordion(this)">
                                     <span>Soat 7:00 da boshalandi ish vaqti</span>
                                     <i data-lucide="chevron-down"></i>
                                 </div>
                                 <div class="accordion-content">Bu esa koplab mijozlar uhcun juda qulay, ertalabki nonushta ham qilib olishadi) Ba'zi filallar 01:00–03:00 gacha ishlaydi</div>
                             </div>
-                            <div class="accordion-item" style="transition-delay: 0.3s">
+                            <div class="accordion-item">
                                 <div class="accordion-header" onclick="toggleAccordion(this)">
                                     <span>Sifat va servis haqidagi ijobiy fikrlar:</span>
                                     <i data-lucide="chevron-down"></i>
                                 </div>
                                 <div class="accordion-content">Restaurant Guru’da 4.9/5 reyting da turadi, Mijozlar qahvaning tamini va xizmatni yuqori baholagan</div>
                             </div>
-                            <div class="accordion-item" style="transition-delay: 0.4s">
+                            <div class="accordion-item">
                                 <div class="accordion-header" onclick="toggleAccordion(this)">
                                     <span>Faol SMM, Brand yaxshi tanilgan.</span>
                                     <i data-lucide="chevron-down"></i>
                                 </div>
                                 <div class="accordion-content">O'zining auditorya segmenti ga mos kantent lar chiqariladi. Oshiqcha keraksiz narsalar yo'q.</div>
                             </div>
-                            <div class="accordion-item" style="transition-delay: 0.5s">
+                            <div class="accordion-item">
                                 <div class="accordion-header" onclick="toggleAccordion(this)">
                                     <span>Cafellito cofee UZB dagi eng birinchi</span>
                                     <i data-lucide="chevron-down"></i>
@@ -309,7 +328,7 @@
                         </div>
                     </div>
                     <div class="image-box">
-                        <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=800&auto=format&fit=crop" alt="[Cafellito Sifatli Qahvasi]">
+                        <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80" alt="[Cafellito Kuchli Tomonlari]">
                     </div>
                 </div>
             </div>
@@ -320,27 +339,27 @@
             <div class="container">
                 <div class="content-grid" style="grid-template-columns: 0.8fr 1.2fr;">
                     <div class="image-box">
-                        <img src="https://images.unsplash.com/photo-1559496417-e7f25cb247f3?q=80&w=800&auto=format&fit=crop" alt="[Narx Segmenti Tahlili]">
+                        <img src="https://images.unsplash.com/photo-1559496417-e7f25cb247f3?auto=format&fit=crop&w=800&q=80" alt="[Cafellito Narx Siyosati]">
                     </div>
-                    <div>
-                        <span class="badge badge-w">Zaif Tomonlar</span>
-                        <h2 class="section-title" style="color: var(--weakness-color)">Weaknesses</h2>
+                    <div class="swot-text">
+                        <span class="badge badge-w">Weaknesses</span>
+                        <h2 class="section-title" style="color: var(--weakness-color);">Zaif Tomonlar</h2>
                         <div class="swot-accordion">
-                            <div class="accordion-item" style="transition-delay: 0.1s">
+                            <div class="accordion-item">
                                 <div class="accordion-header" onclick="toggleAccordion(this)">
                                     <span>Premium Narx: Bozor o'rtacha darajasidan yuqori narx siyosati.</span>
                                     <i data-lucide="chevron-down"></i>
                                 </div>
                                 <div class="accordion-content">o'rta cha va unda past bolgan odamlar mahsulot ni xarid qila olmaydi va natijada bu segmentdagi mijozlar arzonroq mahsulot topish cuhun raqobatchilarga ketishadi.</div>
                             </div>
-                            <div class="accordion-item" style="transition-delay: 0.2s">
+                            <div class="accordion-item">
                                 <div class="accordion-header" onclick="toggleAccordion(this)">
                                     <span>O'tirish joyi: Aksariyat filiallar faqat olib ketish uchun moslangan.</span>
                                     <i data-lucide="chevron-down"></i>
                                 </div>
                                 <div class="accordion-content">Natijada Mijozlarni ko'ngli qolib ketishiga olib keladi. va brend ga negatb fikrlar kelishi mumkin</div>
                             </div>
-                            <div class="accordion-item" style="transition-delay: 0.3s">
+                            <div class="accordion-item">
                                 <div class="accordion-header" onclick="toggleAccordion(this)">
                                     <span>POD (Points of Difference): Boshqa raqobatchilardan juda aniqlik bilan ajiralib turadiogn tarafi kam</span>
                                     <i data-lucide="chevron-down"></i>
@@ -357,25 +376,25 @@
         <section id="opportunities">
             <div class="container">
                 <div class="content-grid">
-                    <div>
-                        <span class="badge badge-o">Imkoniyatlar</span>
-                        <h2 class="section-title" style="color: var(--opportunity-color)">Opportunities</h2>
+                    <div class="swot-text">
+                        <span class="badge badge-o">Opportunities</span>
+                        <h2 class="section-title" style="color: var(--opportunity-color);">Imkoniyatlar</h2>
                         <div class="swot-accordion">
-                            <div class="accordion-item" style="transition-delay: 0.1s">
+                            <div class="accordion-item">
                                 <div class="accordion-header" onclick="toggleAccordion(this)">
                                     <span>Loyallik: Cashback va bonuslar orqali "sodiq auditoryani " yaratish.</span>
                                     <i data-lucide="chevron-down"></i>
                                 </div>
                                 <div class="accordion-content">Mahalliy brend sifatida sodiqlikni oshirish imkoniga ega: Ya'ni turli hil tez tez qilib turiladiogn aksiyalar, bonuslar, va kerak bo'lsa cashback orqali sodiq auditorya yaratish mumkin</div>
                             </div>
-                            <div class="accordion-item" style="transition-delay: 0.2s">
+                            <div class="accordion-item">
                                 <div class="accordion-header" onclick="toggleAccordion(this)">
                                     <span>360° Marketing: Top-of-mind pozitsiyasini mustahkamlash.</span>
                                     <i data-lucide="chevron-down"></i>
                                 </div>
                                 <div class="accordion-content">Odamlarning miyyasiga doim cafellito kelishi kerak. Chunki 70+ filial bor hammaga yaqin</div>
                             </div>
-                            <div class="accordion-item" style="transition-delay: 0.3s">
+                            <div class="accordion-item">
                                 <div class="accordion-header" onclick="toggleAccordion(this)">
                                     <span>Franshiza: Viloyatlarga filiallarni jadallashtirish.</span>
                                     <i data-lucide="chevron-down"></i>
@@ -385,7 +404,7 @@
                         </div>
                     </div>
                     <div class="image-box">
-                        <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=800&auto=format&fit=crop" alt="[Kengayish Imkoniyatlari]">
+                        <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80" alt="[Kengayish Imkoniyatlari]">
                     </div>
                 </div>
             </div>
@@ -396,27 +415,27 @@
             <div class="container">
                 <div class="content-grid" style="grid-template-columns: 0.8fr 1.2fr;">
                     <div class="image-box">
-                        <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?q=80&w=800&auto=format&fit=crop" alt="[Raqobat va Tahdidlar]">
+                        <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=800&q=80" alt="[Raqobat va Xavflar]">
                     </div>
-                    <div>
-                        <span class="badge badge-t">Xavf-hatarlar</span>
-                        <h2 class="section-title" style="color: var(--threat-color)">Threats</h2>
+                    <div class="swot-text">
+                        <span class="badge badge-t">Threats</span>
+                        <h2 class="section-title" style="color: var(--threat-color);">Xavf-hatarlar</h2>
                         <div class="swot-accordion">
-                            <div class="accordion-item" style="transition-delay: 0.1s">
+                            <div class="accordion-item">
                                 <div class="accordion-header" onclick="toggleAccordion(this)">
                                     <span>Raqobat kuchayishi: Global brendlarning UZB ga kirib kelishi:</span>
                                     <i data-lucide="chevron-down"></i>
                                 </div>
                                 <div class="accordion-content">Qahva va oziq ovqat biznesida raqobat juda kuchli, tez tez yangilik qilib turmasa aniq yutqazadi</div>
                             </div>
-                            <div class="accordion-item" style="transition-delay: 0.2s">
+                            <div class="accordion-item">
                                 <div class="accordion-header" onclick="toggleAccordion(this)">
                                     <span>Arzonroq Raqobatchilar: Narx sezgirligi yuqori mijozlar.</span>
                                     <i data-lucide="chevron-down"></i>
                                 </div>
                                 <div class="accordion-content">Caffelito ning narxi baland bo'lgani uchun. qodir bo'lmagan mijozlar boshqa arzonroq raqobatchilarga ketib qolishi mumkin. (O'rta darajadagi mijozlar uchun ham alohida menu qilinishi kerak)</div>
                             </div>
-                            <div class="accordion-item" style="transition-delay: 0.3s">
+                            <div class="accordion-item">
                                 <div class="accordion-header" onclick="toggleAccordion(this)">
                                     <span>Sifat Nazorati: 70+ filialda bir xil nazorat qilish juda qiyin:</span>
                                     <i data-lucide="chevron-down"></i>
@@ -430,75 +449,73 @@
         </section>
 
         <!-- Recommendations -->
-        <section id="recommendations">
-            <div class="container text-center">
-                <h2 class="section-title">Xulosa va Tavsiyalar</h2>
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem;">
-                    <div style="background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 20px;">
-                        <h3 style="margin-bottom: 1rem;">Raqamli Nazorat</h3>
-                        <p>Ilova orqali sifatni 100% nazoratga olish va mijozlar bazasini kengaytirish.</p>
+        <section id="recommendations" style="background: var(--primary); color: white; text-align: center;">
+            <div class="container">
+                <h2 class="section-title">Strategik Xulosa</h2>
+                <div class="rec-grid">
+                    <div class="rec-card">
+                        <h3 style="color: var(--secondary); margin-bottom: 0.8rem;">📱 Raqamlashtirish</h3>
+                        <p>Ilova yaratish orqali barcha 70+ filialda sifatni bir xil ushlash va mijozlar loyalligini oshirish.</p>
                     </div>
-                    <div style="background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 20px;">
-                        <h3 style="margin-bottom: 1rem;">Viloyatlar Ekpansiyasi</h3>
-                        <p>Franshiza orqali tezroq viloyat bozorlarini egallash.</p>
+                    <div class="rec-card">
+                        <h3 style="color: var(--secondary); margin-bottom: 0.8rem;">🌍 Ekspansiya</h3>
+                        <p>Franshiza modeli orqali raqobatchilar hali kirmagan viloyat bozorlarini tezkorlik bilan egallash.</p>
                     </div>
                 </div>
+                <p style="margin-top: 4rem; font-style: italic; opacity: 0.6; font-size: 0.9rem;">Cafellito Coffee SWOT Analysis 2025</p>
             </div>
         </section>
     </main>
 
+    <!-- Mobile Navigation -->
     <div class="nav-controls">
-        <button class="nav-btn" onclick="moveSlide(-1)"><i data-lucide="chevron-up"></i></button>
-        <button class="nav-btn" onclick="moveSlide(1)"><i data-lucide="chevron-down"></i></button>
+        <button class="nav-btn" onclick="scrollToTop()"><i data-lucide="arrow-up"></i></button>
+        <button class="nav-btn" onclick="scrollNext()"><i data-lucide="arrow-down"></i></button>
     </div>
 
     <script>
+        // Initialize Icons
         lucide.createIcons();
-        let currentSlide = 0;
-        const sections = document.querySelectorAll('section');
-        const progressBar = document.getElementById('progressBar');
 
+        // Accordion Logic
         function toggleAccordion(header) {
             const item = header.parentElement;
             const parent = item.parentElement;
             const isOpen = item.classList.contains('open');
+            
+            // Close others
             parent.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('open'));
-            if (!isOpen) item.classList.add('open');
+            
+            // Toggle current
+            if (!isOpen) {
+                item.classList.add('open');
+            }
         }
 
-            sections.forEach((_, idx) => {
-            const dot = document.createElement('div');
-            dot.classList.add('progress-dot');
-            if (idx === 0) dot.classList.add('active');
-            dot.addEventListener('click', () => goToSlide(idx));
-            progressBar.appendChild(dot);
-        });
-
-        function updateDots() {
-            document.querySelectorAll('.progress-dot').forEach((dot, idx) => {
-                dot.classList.toggle('active', idx === currentSlide);
-            });
+        // Navigation helpers
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function goToSlide(index) {
-            if (index < 0 || index >= sections.length) return;
-            currentSlide = index;
-            sections.forEach((s, i) => {
-                s.style.transform = `translateY(-${currentSlide * 100}%)`;
-                s.classList.toggle('active', i === currentSlide);
-            });
-            updateDots();
+        function scrollNext() {
+            const sections = document.querySelectorAll('section');
+            const currentPos = window.pageYOffset;
+            
+            for (let i = 0; i < sections.length; i++) {
+                if (sections[i].offsetTop > currentPos + 10) {
+                    sections[i].scrollIntoView({ behavior: 'smooth' });
+                    break;
+                }
+            }
         }
 
-        function moveSlide(direction) { goToSlide(currentSlide + direction); }
-
-        window.addEventListener('wheel', (e) => {
-            if (window.isScrolling) return;
-            window.isScrolling = true;
-            if (e.deltaY > 0) moveSlide(1);
-            else moveSlide(-1);
-            setTimeout(() => { window.isScrolling = false; }, 1000);
-        });
+        // Scroll Progress
+        window.onscroll = function() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("scrollProgress").style.width = scrolled + "%";
+        };
     </script>
 </body>
 </html>
