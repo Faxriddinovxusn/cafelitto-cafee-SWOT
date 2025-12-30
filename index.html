@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cafellito Coffee - Professional SWOT Tahlili</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary: #4a332d;
+            --secondary: #d4a373;
+            --accent: #fefae0;
+            --text: #2b2d42;
+            --white: #ffffff;
+            --strength-color: #2a9d8f;
+            --weakness-color: #e76f51;
+            --opportunity-color: #457b9d;
+            --threat-color: #1d3557;
+            --card-bg: rgba(255, 255, 255, 0.85);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus+Jakarta+Sans', sans-serif;
+            background: var(--accent);
+            color: var(--text);
+            overflow: hidden;
+        }
+
+        section {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 4rem;
+            transition: transform 0.8s cubic-bezier(0.86, 0, 0.07, 1);
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            z-index: 2;
+        }
+
+        h1, h2 {
+            font-family: 'Playfair+Display', serif;
+            line-height: 1.1;
+        }
+
+        .section-title {
+            font-size: 5rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease 0.3s;
+        }
+
+        .active .section-title {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .image-box {
+            position: relative;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            aspect-ratio: 4/5;
+            background: #eee;
+        }
+
+        .image-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        /* Toggle (Accordion) Styling */
+        .swot-accordion {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .accordion-item {
+            background: var(--card-bg);
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+
+        .active .accordion-item {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .accordion-header {
+            padding: 0.9rem 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.05rem;
+            user-select: none;
+            transition: background 0.3s;
+            text-align: left;
+        }
+
+        .accordion-header:hover {
+            background: rgba(212, 163, 115, 0.1);
+        }
+
+        .accordion-header i {
+            transition: transform 0.3s ease;
+            color: var(--secondary);
+            flex-shrink: 0;
+            margin-left: 10px;
+        }
+
+        .accordion-content {
+            max-height: 0;
+            padding: 0 1.5rem;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #555;
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        .accordion-item.open {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            background: #fff;
+        }
+
+        .accordion-item.open .accordion-content {
+            max-height: 300px;
+            padding-bottom: 1.2rem;
+        }
+
+        .accordion-item.open .accordion-header i {
+            transform: rotate(180deg);
+        }
+
+        /* Backgrounds */
+        #hero { 
+            background: linear-gradient(rgba(74, 51, 45, 0.85), rgba(26, 15, 13, 0.9)), 
+                        url('https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=1000&auto=format&fit=crop'); 
+            background-size: cover;
+            background-position: center;
+            color: var(--accent); 
+        }
+        
+        #strengths { background: #f0fdf4; border-left: 20px solid var(--strength-color); }
+        #weaknesses { background: #fffafb; border-left: 20px solid var(--weakness-color); }
+        #opportunities { background: #f0f7ff; border-left: 20px solid var(--opportunity-color); }
+        #threats { background: #f8fafc; border-left: 20px solid var(--threat-color); }
+        #recommendations { background: var(--primary); color: var(--accent); }
+
+        .nav-controls {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .progress-bar {
+            position: fixed;
+            left: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .progress-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+
+        .progress-dot.active { background: var(--secondary); transform: scale(1.5); }
+
+        .badge {
+            display: inline-block;
+            padding: 0.6rem 1.8rem;
+            border-radius: 50px;
+            text-transform: uppercase;
+            font-weight: 800;
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: 2px;
+            color: white;
+        }
+
+        .badge-s { background: var(--strength-color); }
+        .badge-w { background: var(--weakness-color); }
+        .badge-o { background: var(--opportunity-color); }
+        .badge-t { background: var(--threat-color); }
+
+        @media (max-width: 1024px) {
+            .content-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .section-title { font-size: 3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="progress-bar" id="progressBar"></div>
+
+    <main id="main-slider">
+        <!-- Hero Section -->
+        <section id="hero" class="active">
+            <div class="container text-center">
+                <div style="background: rgba(0,0,0,0.3); padding: 3rem; border-radius: 40px; display: inline-block; backdrop-filter: blur(5px);">
+                    <h2 style="color: var(--secondary); font-size: 1.5rem; margin-bottom: 1rem; letter-spacing: 4px;">STRATEGIK TAHLIL 2025</h2>
+                    <h1 class="section-title" style="font-size: 7rem; margin-bottom: 1rem;">Cafellito</h1>
+                    <p style="font-size: 1.6rem; max-width: 800px; margin: 0 auto; opacity: 0.9;">O'zbekistondagi Take-away formatining yulduzi.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Strengths -->
+        <section id="strengths">
+            <div class="container">
+                <div class="content-grid">
+                    <div>
+                        <span class="badge badge-s">Kuchli Tomonlar</span>
+                        <h2 class="section-title" style="color: var(--strength-color)">Strengths</h2>
+                        <div class="swot-accordion">
+                            <div class="accordion-item" style="transition-delay: 0.1s">
+                                <div class="accordion-header" onclick="toggleAccordion(this)">
+                                    <span>Strategik jihatdan eng qulay nuqtalar</span>
+                                    <i data-lucide="chevron-down"></i>
+                                </div>
+                                <div class="accordion-content">Keng tarmoq va qulay joylashuv, 70 ta filial butun mamlakat bo'yicha va eng qulay lakatsiyalarda joylashgan. (touchpoint yani har bir joydan chiqib kelish)</div>
+                            </div>
+                            <div class="accordion-item" style="transition-delay: 0.2s">
+                                <div class="accordion-header" onclick="toggleAccordion(this)">
+                                    <span>Soat 7:00 da boshalandi ish vaqti</span>
+                                    <i data-lucide="chevron-down"></i>
+                                </div>
+                                <div class="accordion-content">Bu esa koplab mijozlar uhcun juda qulay, ertalabki nonushta ham qilib olishadi) Ba'zi filallar 01:00–03:00 gacha ishlaydi</div>
+                            </div>
+                            <div class="accordion-item" style="transition-delay: 0.3s">
+                                <div class="accordion-header" onclick="toggleAccordion(this)">
+                                    <span>Sifat va servis haqidagi ijobiy fikrlar:</span>
+                                    <i data-lucide="chevron-down"></i>
+                                </div>
+                                <div class="accordion-content">Restaurant Guru’da 4.9/5 reyting da turadi, Mijozlar qahvaning tamini va xizmatni yuqori baholagan</div>
+                            </div>
+                            <div class="accordion-item" style="transition-delay: 0.4s">
+                                <div class="accordion-header" onclick="toggleAccordion(this)">
+                                    <span>Faol SMM, Brand yaxshi tanilgan.</span>
+                                    <i data-lucide="chevron-down"></i>
+                                </div>
+                                <div class="accordion-content">O'zining auditorya segmenti ga mos kantent lar chiqariladi. Oshiqcha keraksiz narsalar yo'q.</div>
+                            </div>
+                            <div class="accordion-item" style="transition-delay: 0.5s">
+                                <div class="accordion-header" onclick="toggleAccordion(this)">
+                                    <span>Cafellito cofee UZB dagi eng birinchi</span>
+                                    <i data-lucide="chevron-down"></i>
+                                </div>
+                                <div class="accordion-content">va tez kor take away formatidagi qahva hona hisoblanadi. (Tezlik kop mijozlarni uchun qulaylik beradi)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="image-box">
+                        <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=800&auto=format&fit=crop" alt="[Cafellito Sifatli Qahvasi]">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Weaknesses -->
+        <section id="weaknesses">
+            <div class="container">
+                <div class="content-grid" style="grid-template-columns: 0.8fr 1.2fr;">
+                    <div class="image-box">
+                        <img src="https://images.unsplash.com/photo-1559496417-e7f25cb247f3?q=80&w=800&auto=format&fit=crop" alt="[Narx Segmenti Tahlili]">
+                    </div>
+                    <div>
+                        <span class="badge badge-w">Zaif Tomonlar</span>
+                        <h2 class="section-title" style="color: var(--weakness-color)">Weaknesses</h2>
+                        <div class="swot-accordion">
+                            <div class="accordion-item" style="transition-delay: 0.1s">
+                                <div class="accordion-header" onclick="toggleAccordion(this)">
+                                    <span>Premium Narx: Bozor o'rtacha darajasidan yuqori narx siyosati.</span>
+                                    <i data-lucide="chevron-down"></i>
+                                </div>
+                                <div class="accordion-content">o'rta cha va unda past bolgan odamlar mahsulot ni xarid qila olmaydi va natijada bu segmentdagi mijozlar arzonroq mahsulot topish cuhun raqobatchilarga ketishadi.</div>
+                            </div>
+                            <div class="accordion-item" style="transition-delay: 0.2s">
+                                <div class="accordion-header" onclick="toggleAccordion(this)">
+                                    <span>O'tirish joyi: Aksariyat filiallar faqat olib ketish uchun moslangan.</span>
+                                    <i data-lucide="chevron-down"></i>
+                                </div>
+                                <div class="accordion-content">Natijada Mijozlarni ko'ngli qolib ketishiga olib keladi. va brend ga negatb fikrlar kelishi mumkin</div>
+                            </div>
+                            <div class="accordion-item" style="transition-delay: 0.3s">
+                                <div class="accordion-header" onclick="toggleAccordion(this)">
+                                    <span>POD (Points of Difference): Boshqa raqobatchilardan juda aniqlik bilan ajiralib turadiogn tarafi kam</span>
+                                    <i data-lucide="chevron-down"></i>
+                                </div>
+                                <div class="accordion-content">Mijozlar koproq narsani talab qilishi boshlashadi</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Opportunities -->
+        <section id="opportunities">
+            <div class="container">
+                <div class="content-grid">
+                    <div>
+                        <span class="badge badge-o">Imkoniyatlar</span>
+                        <h2 class="section-title" style="color: var(--opportunity-color)">Opportunities</h2>
+                        <div class="swot-accordion">
+                            <div class="accordion-item" style="transition-delay: 0.1s">
+                                <div class="accordion-header" onclick="toggleAccordion(this)">
+                                    <span>Loyallik: Cashback va bonuslar orqali "sodiq auditoryani " yaratish.</span>
+                                    <i data-lucide="chevron-down"></i>
+                                </div>
+                                <div class="accordion-content">Mahalliy brend sifatida sodiqlikni oshirish imkoniga ega: Ya'ni turli hil tez tez qilib turiladiogn aksiyalar, bonuslar, va kerak bo'lsa cashback orqali sodiq auditorya yaratish mumkin</div>
+                            </div>
+                            <div class="accordion-item" style="transition-delay: 0.2s">
+                                <div class="accordion-header" onclick="toggleAccordion(this)">
+                                    <span>360° Marketing: Top-of-mind pozitsiyasini mustahkamlash.</span>
+                                    <i data-lucide="chevron-down"></i>
+                                </div>
+                                <div class="accordion-content">Odamlarning miyyasiga doim cafellito kelishi kerak. Chunki 70+ filial bor hammaga yaqin</div>
+                            </div>
+                            <div class="accordion-item" style="transition-delay: 0.3s">
+                                <div class="accordion-header" onclick="toggleAccordion(this)">
+                                    <span>Franshiza: Viloyatlarga filiallarni jadallashtirish.</span>
+                                    <i data-lucide="chevron-down"></i>
+                                </div>
+                                <div class="accordion-content">Franishiza beradi, Bu esa hali boshqa raqobatchilar bormagan joyga tezroq va ertaroq borish imkonini beradi. va hamma joyda mavjud degan pozitsiyani mustahkam qiladi</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="image-box">
+                        <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=800&auto=format&fit=crop" alt="[Kengayish Imkoniyatlari]">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Threats -->
+        <section id="threats">
+            <div class="container">
+                <div class="content-grid" style="grid-template-columns: 0.8fr 1.2fr;">
+                    <div class="image-box">
+                        <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?q=80&w=800&auto=format&fit=crop" alt="[Raqobat va Tahdidlar]">
+                    </div>
+                    <div>
+                        <span class="badge badge-t">Xavf-hatarlar</span>
+                        <h2 class="section-title" style="color: var(--threat-color)">Threats</h2>
+                        <div class="swot-accordion">
+                            <div class="accordion-item" style="transition-delay: 0.1s">
+                                <div class="accordion-header" onclick="toggleAccordion(this)">
+                                    <span>Raqobat kuchayishi: Global brendlarning UZB ga kirib kelishi:</span>
+                                    <i data-lucide="chevron-down"></i>
+                                </div>
+                                <div class="accordion-content">Qahva va oziq ovqat biznesida raqobat juda kuchli, tez tez yangilik qilib turmasa aniq yutqazadi</div>
+                            </div>
+                            <div class="accordion-item" style="transition-delay: 0.2s">
+                                <div class="accordion-header" onclick="toggleAccordion(this)">
+                                    <span>Arzonroq Raqobatchilar: Narx sezgirligi yuqori mijozlar.</span>
+                                    <i data-lucide="chevron-down"></i>
+                                </div>
+                                <div class="accordion-content">Caffelito ning narxi baland bo'lgani uchun. qodir bo'lmagan mijozlar boshqa arzonroq raqobatchilarga ketib qolishi mumkin. (O'rta darajadagi mijozlar uchun ham alohida menu qilinishi kerak)</div>
+                            </div>
+                            <div class="accordion-item" style="transition-delay: 0.3s">
+                                <div class="accordion-header" onclick="toggleAccordion(this)">
+                                    <span>Sifat Nazorati: 70+ filialda bir xil nazorat qilish juda qiyin:</span>
+                                    <i data-lucide="chevron-down"></i>
+                                </div>
+                                <div class="accordion-content">ilova yaratish orqali nazorat ni sezilarli darajada oshirish mumkin.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recommendations -->
+        <section id="recommendations">
+            <div class="container text-center">
+                <h2 class="section-title">Xulosa va Tavsiyalar</h2>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem;">
+                    <div style="background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 20px;">
+                        <h3 style="margin-bottom: 1rem;">Raqamli Nazorat</h3>
+                        <p>Ilova orqali sifatni 100% nazoratga olish va mijozlar bazasini kengaytirish.</p>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 20px;">
+                        <h3 style="margin-bottom: 1rem;">Viloyatlar Ekpansiyasi</h3>
+                        <p>Franshiza orqali tezroq viloyat bozorlarini egallash.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="nav-controls">
+        <button class="nav-btn" onclick="moveSlide(-1)"><i data-lucide="chevron-up"></i></button>
+        <button class="nav-btn" onclick="moveSlide(1)"><i data-lucide="chevron-down"></i></button>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        let currentSlide = 0;
+        const sections = document.querySelectorAll('section');
+        const progressBar = document.getElementById('progressBar');
+
+        function toggleAccordion(header) {
+            const item = header.parentElement;
+            const parent = item.parentElement;
+            const isOpen = item.classList.contains('open');
+            parent.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('open'));
+            if (!isOpen) item.classList.add('open');
+        }
+
+            sections.forEach((_, idx) => {
+            const dot = document.createElement('div');
+            dot.classList.add('progress-dot');
+            if (idx === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => goToSlide(idx));
+            progressBar.appendChild(dot);
+        });
+
+        function updateDots() {
+            document.querySelectorAll('.progress-dot').forEach((dot, idx) => {
+                dot.classList.toggle('active', idx === currentSlide);
+            });
+        }
+
+        function goToSlide(index) {
+            if (index < 0 || index >= sections.length) return;
+            currentSlide = index;
+            sections.forEach((s, i) => {
+                s.style.transform = `translateY(-${currentSlide * 100}%)`;
+                s.classList.toggle('active', i === currentSlide);
+            });
+            updateDots();
+        }
+
+        function moveSlide(direction) { goToSlide(currentSlide + direction); }
+
+        window.addEventListener('wheel', (e) => {
+            if (window.isScrolling) return;
+            window.isScrolling = true;
+            if (e.deltaY > 0) moveSlide(1);
+            else moveSlide(-1);
+            setTimeout(() => { window.isScrolling = false; }, 1000);
+        });
+    </script>
+</body>
+</html>
