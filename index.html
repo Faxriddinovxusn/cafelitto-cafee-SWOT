@@ -242,9 +242,99 @@
             color: white;
         }
 
-        .card:nth-child(2):hover {
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        .card:nth-child(3):hover {
+            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
             color: white;
+        }
+
+        .business-card h3 {
+            margin-bottom: 1.5rem;
+        }
+
+        .miro-btn {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: var(--primary);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .miro-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .miro-btn:hover::before {
+            left: 100%;
+        }
+
+        .miro-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: var(--shadow-hover);
+            background: linear-gradient(135deg, #FFA500, #FFD700);
+        }
+
+        .miro-btn:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+
+        /* Competitor Button */
+        .competitor-btn {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            border: none;
+            padding: 1.2rem 3rem;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .competitor-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .competitor-btn:hover::before {
+            left: 100%;
+        }
+
+        .competitor-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: var(--shadow-hover);
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+        }
+
+        .competitor-btn:active {
+            transform: translateY(-1px) scale(1.02);
         }
 
         .card h3 {
@@ -701,6 +791,7 @@
             .four-p-content li { padding: 0.8rem; }
             .sheets-btn { font-size: 0.9rem; padding: 0.8rem 1.5rem; }
             .nav-controls { bottom: 10px; right: 10px; }
+            .competitor-btn { font-size: 1rem; padding: 1rem 2rem; margin-top: 1rem; }
             .nav-btn { width: 40px; height: 40px; }
             .progress-bar { left: 10px; }
         }
@@ -734,6 +825,10 @@
             <h3>4P Tahlili</h3>
             <p>Yangi 4P tahlili</p>
         </div>
+        <div class="card business-card">
+            <h3>Biznes model</h3>
+            <button class="miro-btn" onclick="openMiro()">Miro</button>
+        </div>
     </div>
 
     <!-- Back Button -->
@@ -753,6 +848,7 @@
                     <h1 class="section-title" style="font-size: 7rem; margin-bottom: 1rem;">Cafellito</h1>
                     <p style="font-size: 1.6rem; max-width: 800px; margin: 0 auto; opacity: 0.9;">O'zbekistondagi Take-away formatining yulduzi.</p>
                 </div>
+                <button class="competitor-btn" onclick="openCompetitor()">Competitor analiz</button>
             </div>
         </section>
 
@@ -1014,6 +1110,14 @@
 
         function openSheets() {
             window.open('https://docs.google.com/spreadsheets/d/1M8mCBRB6XEIfuvKoAVlsYSYpH8Vg_odUfPtPZK_mUIk/edit?usp=sharing', '_blank');
+        }
+
+        function openMiro() {
+            window.open('https://miro.com/app/board/uXjVGWFdHVY=/?share_link_id=611313898050', '_blank');
+        }
+
+        function openCompetitor() {
+            window.open('https://docs.google.com/spreadsheets/d/1qA6pVaWD94wL9ZWefTLhnyEe9m3_3MEFWrGF5Q6RfA0/edit?usp=sharing', '_blank');
         }
 
         function toggleAccordion(header) {
