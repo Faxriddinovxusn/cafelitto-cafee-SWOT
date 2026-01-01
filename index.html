@@ -482,14 +482,14 @@
         }
 
         .accordion-item {
-            background: rgba(255,255,255,0.8);
+            background: linear-gradient(135deg, #FFF8DC, #FFD700);
             border-radius: 18px;
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             opacity: 0;
             transform: translateX(-20px);
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,215,0,0.3);
         }
 
         .active .accordion-item {
@@ -558,11 +558,11 @@
             color: var(--accent); 
         }
         
-        #strengths { background: linear-gradient(135deg, #d5f4e6 0%, #a8e6cf 100%); border-left: 20px solid var(--strength-color); }
-        #weaknesses { background: linear-gradient(135deg, #fdeaa7 0%, #f7dc6f 100%); border-left: 20px solid var(--weakness-color); }
-        #opportunities { background: linear-gradient(135deg, #a8d8ea 0%, #7fb3d5 100%); border-left: 20px solid var(--opportunity-color); }
-        #threats { background: linear-gradient(135deg, #d7bde2 0%, #bb8fce 100%); border-left: 20px solid var(--threat-color); }
-        #recommendations { background: linear-gradient(135deg, var(--primary), #34495e); color: var(--accent); }
+        #strengths { background: #FFF8DC; border-left: 20px solid var(--strength-color); }
+        #weaknesses { background: #FFF8DC; border-left: 20px solid var(--weakness-color); }
+        #opportunities { background: #FFF8DC; border-left: 20px solid var(--opportunity-color); }
+        #threats { background: #FFF8DC; border-left: 20px solid var(--threat-color); }
+        #recommendations { background: #FFF8DC; color: var(--text); }
 
         .nav-controls {
             position: fixed;
